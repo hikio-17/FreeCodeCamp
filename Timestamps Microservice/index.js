@@ -24,19 +24,19 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/api", (req, res) => {
-  const currentDate = new Date();
-  const unixTimesStamp = Date.parse(currentDate);
-  const utcDate = currentDate.toUTCString();
-
-  res.json({ unix: unixTimesStamp, utc: utcDate });
-});
-
 app.get('/api/:date?', (req, res) => {
   const dateString = req.params.date;
   const dateStringRegex = /^[0-9]+$/;
   const numbersOnly = dateStringRegex.test(dateString);
 
+  if (dateString === undefined) {
+    const currentDate = new Date();
+    const unixTimesStamp = Date.parse(currentDate);
+    const utcDate = currentDate.toUTCString();
+  
+    res.json({ unix: unixTimesStamp, utc: utcDate });
+  }
+  
   if (!numbersOnly) {
     const unixTimesStamp = Date.parse(dateString);
     const utcDate = new Date(unixTimesStamp).toUTCString();
